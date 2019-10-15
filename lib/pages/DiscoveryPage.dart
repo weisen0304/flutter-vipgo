@@ -1,11 +1,15 @@
-import 'dart:async';
-import 'CommonWebPage.dart';
-import 'OfflineActivityPage.dart';
 import 'package:flutter/material.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+import 'dart:convert';
+import '../api/Api.dart';
+import '../util/NetUtils.dart';
+import '../pages/ProductDetailPage.dart';
 
-class DiscoveryPage extends StatelessWidget {
+class DiscoveryPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => DiscoveryPageState();
+}
 
+class DiscoveryPageState extends State<DiscoveryPage> {
   static const String TAG_START = "startDivider";
   static const String TAG_END = "endDivider";
   static const String TAG_CENTER = "centerDivider";
@@ -14,165 +18,132 @@ class DiscoveryPage extends StatelessWidget {
   static const double IMAGE_ICON_WIDTH = 30.0;
   static const double ARROW_ICON_WIDTH = 16.0;
 
-  final imagePaths = [
-    "images/ic_discover_softwares.png",
-    "images/ic_discover_git.png",
-    "images/ic_discover_gist.png",
-    "images/ic_discover_scan.png",
-    "images/ic_discover_shake.png",
-    "images/ic_discover_nearby.png",
-    "images/ic_discover_pos.png",
-  ];
-  final titles = [
-    "开源软件", "码云推荐", "代码片段", "扫一扫", "摇一摇", "码云封面人物", "线下活动"
-  ];
-  final rightArrowIcon = Image.asset('images/ic_arrow_right.png', width: ARROW_ICON_WIDTH, height: ARROW_ICON_WIDTH,);
+  var listData;
+  var curPage = 1;
+  var listTotalSize = 0;
+  final rightArrowIcon = Image.asset(
+    'images/ic_arrow_right.png',
+    width: ARROW_ICON_WIDTH,
+    height: ARROW_ICON_WIDTH,
+  );
   final titleTextStyle = TextStyle(fontSize: 16.0);
-  final List listData = [];
 
-  DiscoveryPage() {
-    initData();
+  @override
+  void initState() {
+    super.initState();
+    getArticlesList(false);
   }
 
-  initData() {
-    listData.add(TAG_START);
-    for (int i = 0; i < 3; i++) {
-      listData.add(ListItem(title: titles[i], icon: imagePaths[i]));
-      if (i == 2) {
-        listData.add(TAG_END);
-      } else {
-        listData.add(TAG_CENTER);
+  // 从网络获取数据，isLoadMore表示是否是加载更多数据
+  getArticlesList(bool isLoadMore) {
+    String url = Api.articlesList;
+    url += "?pageIndex=$curPage&pageSize=10";
+    NetUtils.get(url).then((data) {
+      if (data != null) {
+        // 将接口返回的json字符串解析为map类型
+        Map<String, dynamic> map = json.decode(data);
+        print(map['code'] == 200);
+        if (map['code'] == 200) {
+          // code=0表示请求成功
+          // var msg = map['msg'];
+          // total表示资讯总条数
+          listTotalSize = map['data'].length;
+          print(listTotalSize);
+          // data为数据内容，其中包含slide和news两部分，分别表示头部轮播图数据，和下面的列表数据
+          var _listData = map['data'];
+          setState(() {
+            if (!isLoadMore) {
+              // 不是加载更多，则直接为变量赋值
+              listData = _listData;
+            }
+          });
+        }
       }
-    }
-    listData.add(TAG_BLANK);
-    listData.add(TAG_START);
-    for (int i = 3; i < 5; i++) {
-      listData.add(ListItem(title: titles[i], icon: imagePaths[i]));
-      if (i == 4) {
-        listData.add(TAG_END);
-      } else {
-        listData.add(TAG_CENTER);
-      }
-    }
-    listData.add(TAG_BLANK);
-    listData.add(TAG_START);
-    for (int i = 5; i < 7; i++) {
-      listData.add(ListItem(title: titles[i], icon: imagePaths[i]));
-      if (i == 6) {
-        listData.add(TAG_END);
-      } else {
-        listData.add(TAG_CENTER);
-      }
-    }
-  }
-
-  Widget getIconImage(path) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-      child: Image.asset(path, width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
-    );
+    });
   }
 
   renderRow(BuildContext ctx, int i) {
-    var item = listData[i];
-    if (item is String) {
-      switch (item) {
-        case TAG_START:
-        case TAG_END:
-          return Divider(height: 1.0,);
-        case TAG_CENTER:
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(50.0, 0.0, 0.0, 0.0),
-            child: Divider(height: 1.0,),
-          );
-        case TAG_BLANK:
-          return Container(
-            height: 20.0,
-          );
-      }
-    } else if (item is ListItem) {
-      var listItemContent =  Padding(
-        padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
-        child: Row(
+    if (listData != null) {
+      var item = listData[i];
+      var thumbImgUrl = item['image_big'];
+      var thumbImg = Container(
+        // margin: const EdgeInsets.all(10.0),
+        width: 280.0,
+        height: 180.0,
+        decoration: BoxDecoration(
+          // shape: BoxShape.circle,
+          // color: const Color(0xFFECECEC),
+          image: DecorationImage(
+              image: NetworkImage(thumbImgUrl), fit: BoxFit.contain),
+          border: Border.all(
+            color: const Color(0xFFECECEC),
+            width: 0,
+          ),
+        ),
+      );
+      var listItemContent = Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+        child: Column(
           children: <Widget>[
-            getIconImage(item.icon),
-            Expanded(
-                child: Text(item.title, style: titleTextStyle,)
+            Text(
+              item['page_title'],
+              style: titleTextStyle,
             ),
-            rightArrowIcon
+            Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 32.0),
+                child: thumbImg),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 10.0),
+              child: Row(
+                children: <Widget>[
+                  Text(item['publish_time'],
+                      style:
+                          TextStyle(fontSize: 13.0, color: Color(0xFFCDCDCD))),
+                  Container(
+                    width: 10,
+                  ),
+                  new Icon(Icons.remove_red_eye,
+                      size: 16, color: Color(0xFFCDCDCD)),
+                  Container(
+                    width: 10,
+                  ),
+                  Text(item['read_count'],
+                      style:
+                          TextStyle(fontSize: 13.0, color: Color(0xFFCDCDCD))),
+                ],
+              ),
+            ),
+            Container(
+              height: 12,
+              color: Color(0xFFEFEFEF),
+            )
           ],
         ),
       );
       return InkWell(
         onTap: () {
-          handleListItemClick(ctx, item);
+          print(item['artcle_url']);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (ctx) => ProductDetailPage(
+                    prodLink: item['article_url'],
+                  )));
         },
         child: listItemContent,
       );
     }
   }
 
-  void handleListItemClick(BuildContext ctx, ListItem item) {
-    String title = item.title;
-    if (title == "扫一扫") {
-      scan();
-    } else if (title == "线下活动") {
-      Navigator.of(ctx).push(MaterialPageRoute(
-        builder: (context) {
-          return OfflineActivityPage();
-        }
-      ));
-    } else if (title == "码云推荐") {
-      Navigator.of(ctx).push(MaterialPageRoute(
-          builder: (context) {
-            return CommonWebPage(title: "码云推荐", url: "https://m.gitee.com/explore");
-          }
-      ));
-    } else if (title == "代码片段") {
-      Navigator.of(ctx).push(MaterialPageRoute(
-          builder: (context) {
-            return CommonWebPage(title: "代码片段", url: "https://m.gitee.com/gists");
-          }
-      ));
-    } else if (title == "开源软件") {
-      Navigator.of(ctx).push(MaterialPageRoute(
-          builder: (context) {
-            return CommonWebPage(title: "开源软件", url: "https://m.gitee.com/explore");
-          }
-      ));
-    } else if (title == "码云封面人物") {
-      Navigator.of(ctx).push(MaterialPageRoute(
-          builder: (context) {
-            return CommonWebPage(title: "码云封面人物", url: "https://m.gitee.com/gitee-stars/");
-          }
-      ));
-    }
-  }
-
-  Future scan() async {
-    try {
-      String barcode = await BarcodeScanner.scan();
-      print(barcode);
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-      child: ListView.builder(
-        itemCount: listData.length,
-        itemBuilder: (context, i) => renderRow(context, i),
+    return new Scaffold(
+      appBar: new AppBar(title: Text('Discovery')),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
+        child: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (context, i) => renderRow(context, i),
+        ),
       ),
     );
   }
-
-}
-
-class ListItem {
-  String icon;
-  String title;
-  ListItem({this.icon, this.title});
 }
