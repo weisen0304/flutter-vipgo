@@ -25,6 +25,7 @@ dependencies:
   shared_preferences: ^0.4.3
   event_bus: ^1.0.1
   barcode_scan: ^0.0.4
+  share: ^0.6.2+4
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,15 @@ flutter:
     - images/ic_osc_logo.png
     - images/ic_add_pics.png
     - images/ic_eye.png
+
+    - images/app_flags/ca.jpg
+    - images/app_flags/de.jpg
+    - images/app_flags/es.jpg
+    - images/app_flags/fr.jpg
+    - images/app_flags/it.jpg
+    - images/app_flags/jp.jpg
+    - images/app_flags/uk.jpg
+    - images/app_flags/us.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

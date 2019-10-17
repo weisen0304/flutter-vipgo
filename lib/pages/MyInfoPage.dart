@@ -7,6 +7,12 @@ import 'package:flutter_osc/util/ThemeUtils.dart';
 import '../pages/CommonWebPage.dart';
 import '../pages/LoginPage.dart';
 import '../pages/NewLoginPage.dart';
+import '../pages/HistoryListPage.dart';
+import '../pages/DealRequestPage.dart';
+import '../pages/EarnMoneyDetailPage.dart';
+import '../pages/MyFavoritePage.dart';
+import '../pages/NotificationPage.dart';
+import '../pages/MarketplacePage.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/Api.dart';
@@ -27,7 +33,15 @@ class MyInfoPageState extends State<MyInfoPage> {
   static const double IMAGE_ICON_WIDTH = 30.0;
   static const double ARROW_ICON_WIDTH = 16.0;
 
-  var titles = ["我的消息", "阅读记录", "我的博客", "我的问答", "我的活动", "我的团队", "邀请好友"];
+  var titles = [
+    "My Deal Requests",
+    "Refer & Earn Money",
+    "My Favorite",
+    "My Browsing History",
+    "Notification",
+    "Account Settings"
+  ];
+  var moreCount = 1;
   var imagePaths = [
     "images/ic_my_message.png",
     "images/ic_my_blog.png",
@@ -36,6 +50,14 @@ class MyInfoPageState extends State<MyInfoPage> {
     "images/ic_discover_pos.png",
     "images/ic_my_team.png",
     "images/ic_my_recommend.png"
+  ];
+  var contentItem = [
+    {'title': 'My Deal Requests', 'icon': 'images/ic_my_message.png'},
+    {'title': 'Refer & Earn Money', 'icon': 'images/ic_my_blog.png'},
+    {'title': 'My Favorite', 'icon': 'images/ic_my_blog.png'},
+    {'title': 'My Browsing History', 'icon': 'images/ic_discover_pos.png'},
+    {'title': 'Notification', 'icon': 'images/ic_my_team.png'},
+    {'title': 'Account Settings', 'icon': 'images/ic_my_recommend.png'}
   ];
   var icons = [];
   var userAvatar;
@@ -93,18 +115,24 @@ class MyInfoPageState extends State<MyInfoPage> {
   Widget getIconImage(path) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-      child: Image.asset(path,
-          width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
+      child:
+          Image.asset(path, width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     var listView = ListView.builder(
-      itemCount: titles.length * 2,
+      itemCount: contentItem.length * 2,
       itemBuilder: (context, i) => renderRow(i),
     );
-    return listView;
+    return new Scaffold(
+      backgroundColor: Color(0xFFF0F0F0),
+      appBar: new AppBar(
+        title: Text('Profile'),
+      ),
+      body: listView,
+    );
   }
 
   // 获取用户信息
@@ -131,9 +159,8 @@ class MyInfoPageState extends State<MyInfoPage> {
 
   _login() async {
     // 打开登录页并处理登录成功的回调
-    final result = await Navigator
-        .of(context)
-        .push(MaterialPageRoute(builder: (context) {
+    final result =
+        await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return NewLoginPage();
     }));
     // result为"refresh"代表登录成功
@@ -150,44 +177,115 @@ class MyInfoPageState extends State<MyInfoPage> {
   renderRow(i) {
     if (i == 0) {
       var avatarContainer = Container(
-        color: themeColor,
-        height: 200.0,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              userAvatar == null
-                  ? Image.asset(
-                      "images/ic_avatar_default.png",
-                      width: 60.0,
-                    )
-                  : Container(
-                      width: 60.0,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.transparent,
-                        image: DecorationImage(
-                            image: NetworkImage(userAvatar),
-                            fit: BoxFit.cover),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 2.0,
+          color: Colors.white,
+          // height: 200.0,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 40.0),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          "images/jl_logo.png",
+                          width: 120.0,
+                          height: 80.0,
                         ),
-                      ),
+                        Text(
+                          'weisen170304@gmail.com',
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                      ],
                     ),
-              Text(
-                userName == null ? "点击头像登录" : userName,
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 0, 20.0, 0),
+                                child: Icon(
+                                  Icons.help,
+                                  size: 16,
+                                ),
+                              )
+                            ]),
+                        Text(
+                          '\$0.00',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                        Container(
+                          height: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                            //   return HistoryListPage();
+                            // }));
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 36,
+                            decoration: BoxDecoration(
+                                color: themeColor,
+                                border: Border.all(color: Colors.white),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(0.0))),
+                            child: Center(
+                              child: Text(
+                                'WITHDRAW',
+                                // this.widget.text,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 6,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return HistoryListPage();
+                            }));
+                          },
+                          child: Container(
+                            width: 110,
+                            height: 36,
+                            decoration: BoxDecoration(
+                                // color: color,
+                                border: Border.all(color: themeColor),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(0.0))),
+                            child: Center(
+                              child: Text(
+                                'HISTORY',
+                                // this.widget.text,
+                                style: TextStyle(color: themeColor),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
               ),
-            ],
-          ),
-        ),
-      );
+            ),
+          ));
       return GestureDetector(
         onTap: () {
           DataUtils.isLogin().then((isLogin) {
-            if (isLogin) {
+            if (!isLogin) {
               // 已登录，显示用户详细信息
               _showUserInfoDetail();
             } else {
@@ -196,7 +294,10 @@ class MyInfoPageState extends State<MyInfoPage> {
             }
           });
         },
-        child: avatarContainer,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+          child: avatarContainer,
+        ),
       );
     }
     --i;
@@ -206,30 +307,89 @@ class MyInfoPageState extends State<MyInfoPage> {
       );
     }
     i = i ~/ 2;
-    String title = titles[i];
-    var listItemContent = Padding(
-      padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
-      child: Row(
-        children: <Widget>[
-          icons[i],
-          Expanded(
-              child: Text(
-            title,
-            style: titleTextStyle,
-          )),
-          rightArrowIcon
-        ],
-      ),
-    );
-    return InkWell(
-      child: listItemContent,
-      onTap: () {
-        _handleListItemClick(title);
-//        Navigator
-//            .of(context)
-//            .push(MaterialPageRoute(builder: (context) => CommonWebPage(title: "Test", url: "https://my.oschina.net/u/815261/blog")));
-      },
-    );
+    var item = contentItem[i];
+    if (i != contentItem.length - moreCount) {
+      var listItemContent = Padding(
+        padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+              child: Image.asset(item['icon'],
+                  width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
+            ),
+            Expanded(
+                child: Text(
+              item['title'],
+              style: titleTextStyle,
+            )),
+            rightArrowIcon
+          ],
+        ),
+      );
+      return InkWell(
+        child: Container(
+          color: Colors.white,
+          child: listItemContent,
+        ),
+        onTap: () {
+          if (item['title'] == 'My Deal Requests') {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => DealRequestPage()));
+          } else if (item['title'] == 'Refer & Earn Money') {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => EarnMoneyDetailPage()));
+          } else if (item['title'] == 'My Favorite') {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => MyFavoritePage()));
+          } else if (item['title'] == 'My Browsing History') {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => HistoryListPage()));
+          } else if (item['title'] == 'Notification') {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => NotificationPage()));
+          }
+        },
+      );
+    } else {
+      var moreItemContent = Padding(
+        padding: const EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+              child: Image.asset(item['icon'],
+                  width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
+            ),
+            Expanded(
+                child: Text(
+              item['title'],
+              style: titleTextStyle,
+            )),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
+              child: Image.network(
+                  'https://www.vipon.com/images/app_flags/us.jpg',
+                  width: IMAGE_ICON_WIDTH,
+                  height: IMAGE_ICON_WIDTH),
+            ),
+            rightArrowIcon
+          ],
+        ),
+      );
+      return InkWell(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: Container(color: Colors.white, child: moreItemContent),
+        ),
+        onTap: () {
+          if (item['title'] == 'Account Settings') {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => MarketplacePage()));
+          }
+        },
+      );
+    }
   }
 
   _showLoginDialog() {
@@ -238,7 +398,7 @@ class MyInfoPageState extends State<MyInfoPage> {
         builder: (BuildContext ctx) {
           return AlertDialog(
             title: Text('提示'),
-            content: Text('没有登录，现在去登录吗？'),
+            content: Text('没���登录，现在去登录吗？'),
             actions: <Widget>[
               FlatButton(
                 child: Text(
@@ -271,13 +431,10 @@ class MyInfoPageState extends State<MyInfoPage> {
         _showLoginDialog();
       } else {
         DataUtils.getUserInfo().then((info) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
+          Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => CommonWebPage(
-                title: "我的博客",
-                url: "https://my.oschina.net/u/${info.id}/blog"
-              )
-            ));
+                  title: "我的博客",
+                  url: "https://my.oschina.net/u/${info.id}/blog")));
         });
       }
     });

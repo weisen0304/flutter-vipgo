@@ -20,7 +20,7 @@ class MyOSCClient extends StatefulWidget {
 }
 
 class MyOSCClientState extends State<MyOSCClient> {
-  final appBarTitles = ['Home', 'Category', 'Find', 'Profile'];
+  final appBarTitles = ['Home', 'Category', 'Discovery', 'Profile'];
   final tabTextStyleSelected = TextStyle(color: const Color(0xff409eff));
   final tabTextStyleNormal = TextStyle(color: const Color(0xff333333));
 

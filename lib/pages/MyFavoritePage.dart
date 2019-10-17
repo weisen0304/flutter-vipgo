@@ -8,21 +8,18 @@ import '../constants/Constants.dart';
 import '../widgets/SlideView.dart';
 import '../pages/NewsDetailPage.dart';
 import '../pages/AmzDetailPage.dart';
-import '../pages/NewsListPageSearch.dart';
-import '../pages/DealRequestPage.dart';
 import '../widgets/CommonEndLine.dart';
 import '../widgets/SlideViewIndicator.dart';
-import '../widgets/MyDrawer.dart';
 import '../widgets/CommonButton.dart';
 
 final slideViewIndicatorStateKey = GlobalKey<SlideViewIndicatorState>();
 
-class NewsListPage extends StatefulWidget {
+class MyFavoritePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => NewsListPageState();
+  State<StatefulWidget> createState() => MyFavoritePageState();
 }
 
-class NewsListPageState extends State<NewsListPage> {
+class MyFavoritePageState extends State<MyFavoritePage> {
   final ScrollController _controller = ScrollController();
   final TextStyle titleTextStyle = TextStyle(fontSize: 15.0);
   final TextStyle subtitleStyle =
@@ -46,15 +43,15 @@ class NewsListPageState extends State<NewsListPage> {
         // scroll to bottom, get next page data
 //        print("load more ... ");
         curPage++;
-        getNewsList(true);
+        getDealsList(true);
       }
     });
-    getNewsList(false);
+    getDealsList(false);
   }
 
   Future<Null> _pullToRefresh() async {
     curPage = 1;
-    getNewsList(false);
+    getDealsList(false);
     return null;
   }
 
@@ -75,66 +72,12 @@ class NewsListPageState extends State<NewsListPage> {
       );
       // return RefreshIndicator(child: listView, onRefresh: _pullToRefresh);
 
-      return new DefaultTabController(
-        length: 4,
-        child: new Scaffold(
-            appBar: new AppBar(
-              // leading: new Icon(Icons.home),
-              title: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 10,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "Search Deal",
-                          hintStyle: TextStyle(color: const Color(0xFF808080)),
-                          filled: true,
-                          fillColor: Colors.white,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                  const Radius.circular(6.0))),
-                          focusColor: Colors.white,
-                          contentPadding: const EdgeInsets.all(10.0)),
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return NewsListPageSearch();
-                        }));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                      child: InkWell(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          child: Image.asset('images/collect.png',
-                              width: 20.0, height: 20.0),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => DealRequestPage()));
-                    },
-                  )),
-                ],
-              ),
-              bottom: new TabBar(
-                tabs: [
-                  new Tab(text: "Featured"),
-                  new Tab(text: "Instant"),
-                  new Tab(text: "Upcoming"),
-                  new Tab(text: "Group"),
-                ],
-              ),
-            ),
-            body: new TabBarView(
-                children: [listView, listView, listView, listView]),
-            drawer: MyDrawer()),
+      return new Scaffold(
+        appBar: new AppBar(
+          title: Text('My Favorite'),
+          actions: <Widget>[Icon(Icons.delete_outline)],
+        ),
+        body: listView,
       );
     }
   }
@@ -171,8 +114,8 @@ class NewsListPageState extends State<NewsListPage> {
   }
 
   // 从网络获取数据，isLoadMore表示是否是加载更多数据
-  getNewsList(bool isLoadMore) {
-    String url = Api.newsList;
+  getDealsList(bool isLoadMore) {
+    String url = Api.dealsList;
     url += "?pageIndex=$curPage&pageSize=10";
     NetUtils.get(url).then((data) {
       if (data != null) {
@@ -182,7 +125,7 @@ class NewsListPageState extends State<NewsListPage> {
           // code=0表示请求成功
           // var msg = map['msg'];
           // total表示资讯总条数
-          listTotalSize = 24;
+          listTotalSize = map['data'].length;
           // data为数据内容，其中包含slide和news两部分，分别表示头部轮播图数据，和下面的列表数据
           var _listData = map['data'];
           var _slideData = [];
@@ -254,14 +197,14 @@ class NewsListPageState extends State<NewsListPage> {
       children: <Widget>[
         Container(
           child: Text(
-            itemData['final_price_format'],
+            '${itemData['currency_show']} ${itemData['price']}',
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w200),
           ),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
           child: Text(
-            itemData['price_format'],
+            ' ${itemData['currency_show']} ${itemData['price2']}',
             style: TextStyle(color: const Color(0xFFB5BDC0), fontSize: 12.0),
           ),
         ),

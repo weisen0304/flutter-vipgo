@@ -17,12 +17,12 @@ import '../widgets/CommonButton.dart';
 
 final slideViewIndicatorStateKey = GlobalKey<SlideViewIndicatorState>();
 
-class NewsListPage extends StatefulWidget {
+class HistoryListPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => NewsListPageState();
+  State<StatefulWidget> createState() => HistoryListPageState();
 }
 
-class NewsListPageState extends State<NewsListPage> {
+class HistoryListPageState extends State<HistoryListPage> {
   final ScrollController _controller = ScrollController();
   final TextStyle titleTextStyle = TextStyle(fontSize: 15.0);
   final TextStyle subtitleStyle =
@@ -75,66 +75,20 @@ class NewsListPageState extends State<NewsListPage> {
       );
       // return RefreshIndicator(child: listView, onRefresh: _pullToRefresh);
 
-      return new DefaultTabController(
-        length: 4,
-        child: new Scaffold(
-            appBar: new AppBar(
-              // leading: new Icon(Icons.home),
-              title: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 10,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "Search Deal",
-                          hintStyle: TextStyle(color: const Color(0xFF808080)),
-                          filled: true,
-                          fillColor: Colors.white,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          border: OutlineInputBorder(
-                              borderRadius: const BorderRadius.all(
-                                  const Radius.circular(6.0))),
-                          focusColor: Colors.white,
-                          contentPadding: const EdgeInsets.all(10.0)),
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return NewsListPageSearch();
-                        }));
-                      },
-                    ),
-                  ),
-                  Expanded(
-                      child: InkWell(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          child: Image.asset('images/collect.png',
-                              width: 20.0, height: 20.0),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => DealRequestPage()));
-                    },
-                  )),
-                ],
-              ),
-              bottom: new TabBar(
-                tabs: [
-                  new Tab(text: "Featured"),
-                  new Tab(text: "Instant"),
-                  new Tab(text: "Upcoming"),
-                  new Tab(text: "Group"),
-                ],
-              ),
-            ),
-            body: new TabBarView(
-                children: [listView, listView, listView, listView]),
-            drawer: MyDrawer()),
+      return new Scaffold(
+        appBar: new AppBar(
+          title: Text('Browsing History'),
+          actions: <Widget>[
+           IconButton(
+                icon: Icon(Icons.delete_outline),
+                onPressed: () => {
+                  // Navigator.of(context).push(
+                  //     MaterialPageRoute(builder: (ctx) => DealRequestPage()))
+                },
+              )
+          ],
+        ),
+        body: listView,
       );
     }
   }

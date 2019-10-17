@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:share/share.dart';
 
-class NewsDetailPage extends StatefulWidget {
+class ProductDetailPage extends StatefulWidget {
   final String id;
+  final String prodLink;
 
-  NewsDetailPage({Key key, this.id}) : super(key: key);
+  ProductDetailPage({Key key, this.id, this.prodLink}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => NewsDetailPageState(id: this.id);
+  State<StatefulWidget> createState() =>
+      ProductDetailPageState(id: this.id, prodLink: this.prodLink);
 }
 
-class NewsDetailPageState extends State<NewsDetailPage> {
+class ProductDetailPageState extends State<ProductDetailPage> {
   String id;
+  String prodLink;
   bool loaded = false;
   String detailDataStr;
   final flutterWebViewPlugin = FlutterWebviewPlugin();
 
-  NewsDetailPageState({Key key, this.id});
+  ProductDetailPageState({Key key, this.id, this.prodLink});
 
   @override
   void initState() {
@@ -41,29 +43,22 @@ class NewsDetailPageState extends State<NewsDetailPage> {
   Widget build(BuildContext context) {
     List<Widget> titleContent = [];
     titleContent.add(Text(
-      "Deal Details",
+      "vipgo.store",
       style: TextStyle(color: Colors.white),
     ));
     if (!loaded) {
       titleContent.add(CupertinoActivityIndicator());
     }
     titleContent.add(Container(width: 50.0));
+    print(this.prodLink);
     return WebviewScaffold(
-      url: 'https://m.vipon.com/#/product/' + this.id,
+      url: this.prodLink,
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: titleContent,
         ),
         iconTheme: IconThemeData(color: Colors.white),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () => {
-              Share.share('https://m.vipon.com/#/product/' + this.id)
-            },
-          )
-        ],
       ),
       withZoom: false,
       withLocalStorage: true,

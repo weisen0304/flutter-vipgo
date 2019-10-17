@@ -2,13 +2,21 @@ class Api {
   static final String host =
       "http://www.doclever.cn:8090/mock/5d9078ed4a9da91cd653f06f/api/v1";
   // static final String host = "https://www.oschina.net";
-  // 资讯列表
+  // 商品列表
   static final String newsList =
       "http://www.doclever.cn:8090/mock/5d9078ed4a9da91cd653f06f/api/v1/coupons";
   // static final String newsList = "http://osc.yubo.me/news/list";
-  // 资讯列表
+  // 优惠券码
   static final String couponCode =
       "http://www.doclever.cn:8090/mock/5d9078ed4a9da91cd653f06f/api/v1/get_coupon_code";
+
+  // 交易记录列表
+  static final String dealsList =
+      "http://www.doclever.cn:8090/mock/5d9078ed4a9da91cd653f06f/api/v1/deals";
+
+  // 文章列表
+  static final String articlesList =
+      "http://www.doclever.cn:8090/mock/5d9078ed4a9da91cd653f06f/api/v1/articles";
   // 资讯详情
   static final String newsDetail = host + "/action/openapi/news_detail";
 
