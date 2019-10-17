@@ -12,7 +12,6 @@ import '../pages/NewsListPageSearch.dart';
 import '../pages/DealRequestPage.dart';
 import '../widgets/CommonEndLine.dart';
 import '../widgets/SlideViewIndicator.dart';
-import '../widgets/MyDrawer.dart';
 import '../widgets/CommonButton.dart';
 
 final slideViewIndicatorStateKey = GlobalKey<SlideViewIndicatorState>();
@@ -76,18 +75,27 @@ class NewsListPageState extends State<NewsListPage> {
       // return RefreshIndicator(child: listView, onRefresh: _pullToRefresh);
 
       return new DefaultTabController(
-        length: 4,
-        child: new Scaffold(
+          length: 4,
+          child: new Scaffold(
             appBar: new AppBar(
-              // leading: new Icon(Icons.home),
+              leading: InkWell(
+                child: Icon(
+                  Icons.dehaze,
+                  size: 24,
+                ),
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
               title: Row(
                 children: <Widget>[
                   Expanded(
-                    flex: 10,
+                    // flex: 10,
                     child: TextField(
                       decoration: InputDecoration(
                           hintText: "Search Deal",
-                          hintStyle: TextStyle(color: const Color(0xFF808080)),
+                          hintStyle: TextStyle(
+                              color: const Color(0xFF808080), fontSize: 12.0),
                           filled: true,
                           fillColor: Colors.white,
                           enabledBorder: InputBorder.none,
@@ -96,7 +104,7 @@ class NewsListPageState extends State<NewsListPage> {
                               borderRadius: const BorderRadius.all(
                                   const Radius.circular(6.0))),
                           focusColor: Colors.white,
-                          contentPadding: const EdgeInsets.all(10.0)),
+                          contentPadding: const EdgeInsets.all(8.0)),
                       onTap: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (ctx) {
@@ -104,25 +112,23 @@ class NewsListPageState extends State<NewsListPage> {
                         }));
                       },
                     ),
-                  ),
-                  Expanded(
-                      child: InkWell(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          child: Image.asset('images/collect.png',
-                              width: 20.0, height: 20.0),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => DealRequestPage()));
-                    },
-                  )),
+                  )
                 ],
               ),
+              actions: <Widget>[
+                InkWell(
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
+                    child: Image.asset('images/collect.png',
+                        width: 20.0, height: 20.0),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) => DealRequestPage()));
+                  },
+                )
+              ],
               bottom: new TabBar(
                 tabs: [
                   new Tab(text: "Featured"),
@@ -134,8 +140,7 @@ class NewsListPageState extends State<NewsListPage> {
             ),
             body: new TabBarView(
                 children: [listView, listView, listView, listView]),
-            drawer: MyDrawer()),
-      );
+          ));
     }
   }
 

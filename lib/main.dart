@@ -42,7 +42,8 @@ class MyOSCClientState extends State<MyOSCClient> {
       print('color theme index = $index');
       if (index != null) {
         ThemeUtils.currentColorTheme = ThemeUtils.supportColors[index];
-        Constants.eventBus.fire(ChangeThemeEvent(ThemeUtils.supportColors[index]));
+        Constants.eventBus
+            .fire(ChangeThemeEvent(ThemeUtils.supportColors[index]));
       }
     });
     Constants.eventBus.on<ChangeThemeEvent>().listen((event) {
@@ -50,7 +51,12 @@ class MyOSCClientState extends State<MyOSCClient> {
         themeColor = event.color;
       });
     });
-    pages = <Widget>[NewsListPage(), TweetsListPage(), DiscoveryPage(), MyInfoPage()];
+    pages = <Widget>[
+      NewsListPage(),
+      TweetsListPage(),
+      DiscoveryPage(),
+      MyInfoPage()
+    ];
     if (tabImages == null) {
       tabImages = [
         [
@@ -98,41 +104,33 @@ class MyOSCClientState extends State<MyOSCClient> {
       index: _tabIndex,
     );
     return MaterialApp(
-      theme: ThemeData(
-          primaryColor: themeColor
-      ),
+      theme: ThemeData(primaryColor: themeColor),
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: Text(appBarTitles[_tabIndex],
-        //   style: TextStyle(color: Colors.white)),
-        //   iconTheme: IconThemeData(color: Colors.white)
-        // ),
-        body: _body,
-        bottomNavigationBar: CupertinoTabBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: getTabIcon(0),
-                title: getTabTitle(0)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(1),
-                title: getTabTitle(1)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(2),
-                title: getTabTitle(2)),
-            BottomNavigationBarItem(
-                icon: getTabIcon(3),
-                title: getTabTitle(3)),
-          ],
-          currentIndex: _tabIndex,
-          onTap: (index) {
-            setState((){
-              _tabIndex = index;
-            });
-          },
-        ),
-        drawer: MyDrawer()
-      ),
+          // appBar: AppBar(
+          //   title: Text(appBarTitles[_tabIndex],
+          //   style: TextStyle(color: Colors.white)),
+          //   iconTheme: IconThemeData(color: Colors.white)
+          // ),
+          body: _body,
+          bottomNavigationBar: CupertinoTabBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: getTabIcon(0), title: getTabTitle(0)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(1), title: getTabTitle(1)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(2), title: getTabTitle(2)),
+              BottomNavigationBarItem(
+                  icon: getTabIcon(3), title: getTabTitle(3)),
+            ],
+            currentIndex: _tabIndex,
+            onTap: (index) {
+              setState(() {
+                _tabIndex = index;
+              });
+            },
+          ),
+          drawer: MyDrawer()),
     );
   }
 }
-
