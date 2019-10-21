@@ -120,8 +120,8 @@ class NewsListPageState extends State<NewsListPage> {
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
                     padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
-                    child: Image.asset('images/collect.png',
-                        width: 20.0, height: 20.0),
+                    child: Image.asset('images/app_iconfont/coupon2.png',
+                        width: 24.0, height: 24.0, color: Colors.white,),
                   ),
                   onTap: () {
                     Navigator.of(context).push(
@@ -277,6 +277,7 @@ class NewsListPageState extends State<NewsListPage> {
               Container(
                 width: 120,
                 child: CommonButton(
+                    height: 40,
                     text: "Group Coupon",
                     onTap: () => {getCouponCode(itemData['product_id'])}),
               ),

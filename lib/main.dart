@@ -21,8 +21,8 @@ class MyOSCClient extends StatefulWidget {
 
 class MyOSCClientState extends State<MyOSCClient> {
   final appBarTitles = ['Home', 'Category', 'Discovery', 'Profile'];
-  final tabTextStyleSelected = TextStyle(color: const Color(0xff409eff));
-  final tabTextStyleNormal = TextStyle(color: const Color(0xff333333));
+  final tabTextStyleSelected = TextStyle(color: ThemeUtils.currentColorTheme, fontWeight: FontWeight.w300);
+  final tabTextStyleNormal = TextStyle(color: const Color(0xff333333), fontWeight: FontWeight.w300);
 
   Color themeColor = ThemeUtils.currentColorTheme;
   int _tabIndex = 0;
@@ -39,7 +39,6 @@ class MyOSCClientState extends State<MyOSCClient> {
   void initState() {
     super.initState();
     DataUtils.getColorThemeIndex().then((index) {
-      print('color theme index = $index');
       if (index != null) {
         ThemeUtils.currentColorTheme = ThemeUtils.supportColors[index];
         Constants.eventBus

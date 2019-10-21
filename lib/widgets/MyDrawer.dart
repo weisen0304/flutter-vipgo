@@ -123,12 +123,16 @@ class MyDrawer extends StatelessWidget {
           case 0:
             // Home
             // Navigator.of(context).pop();
-            // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-            //   return NewsListPage();
-            // }));
+            // TODO: 判断是否为首页底部路由切换
+            // ModalRoute.of(context).isCurrent
+            //     ? Navigator.of(context).pop()
+            //     : Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+            //         return NewsListPage();
+            //       }));
             break;
           case 1:
             // Join as Seller
+            Navigator.of(context).pop();
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
               return CommonWebPage(
                 url: 'https://seller.myvipon.com/',
@@ -138,6 +142,7 @@ class MyDrawer extends StatelessWidget {
             break;
           case 2:
             // What is Vipgo
+            Navigator.of(context).pop();
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
               return CommonWebPage(
                 url:
@@ -148,6 +153,7 @@ class MyDrawer extends StatelessWidget {
             break;
           case 3:
             // United States
+            Navigator.of(context).pop();
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
               return MarketplacePage();
             }));

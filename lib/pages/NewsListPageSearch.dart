@@ -88,7 +88,7 @@ class NewsListPageSearchState extends State<NewsListPageSearch> {
                             borderRadius: const BorderRadius.all(
                                 const Radius.circular(6.0))),
                         focusColor: Colors.white,
-                        contentPadding: const EdgeInsets.all(10.0)),
+                        contentPadding: const EdgeInsets.all(8.0)),
                     // onTap: () {
                     //   Navigator.of(context)
                     //       .push(MaterialPageRoute(builder: (ctx) {
@@ -237,6 +237,7 @@ class NewsListPageSearchState extends State<NewsListPageSearch> {
               Container(
                 width: 120,
                 child: CommonButton(
+                    height: 40,
                     text: "Group Coupon",
                     onTap: () => {getCouponCode(itemData['product_id'])}),
               ),

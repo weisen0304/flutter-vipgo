@@ -30,8 +30,8 @@ class MyInfoPage extends StatefulWidget {
 class MyInfoPageState extends State<MyInfoPage> {
   Color themeColor = ThemeUtils.currentColorTheme;
 
-  static const double IMAGE_ICON_WIDTH = 30.0;
-  static const double ARROW_ICON_WIDTH = 16.0;
+  static const double IMAGE_ICON_WIDTH = 20.0;
+  static const double ARROW_ICON_WIDTH = 12.0;
 
   var titles = [
     "My Deal Requests",
@@ -43,21 +43,20 @@ class MyInfoPageState extends State<MyInfoPage> {
   ];
   var moreCount = 1;
   var imagePaths = [
-    "images/ic_my_message.png",
-    "images/ic_my_blog.png",
-    "images/ic_my_blog.png",
-    "images/ic_my_question.png",
-    "images/ic_discover_pos.png",
-    "images/ic_my_team.png",
-    "images/ic_my_recommend.png"
+    "images/app_iconfont/coupon1.png",
+    "images/app_iconfont/coupon1.png",
+    "images/app_iconfont/coupon1.png",
+    "images/app_iconfont/coupon1.png",
+    "images/app_iconfont/coupon1.png",
+    "images/app_iconfont/coupon1.png",
   ];
   var contentItem = [
-    {'title': 'My Deal Requests', 'icon': 'images/ic_my_message.png'},
-    {'title': 'Refer & Earn Money', 'icon': 'images/ic_my_blog.png'},
-    {'title': 'My Favorite', 'icon': 'images/ic_my_blog.png'},
-    {'title': 'My Browsing History', 'icon': 'images/ic_discover_pos.png'},
-    {'title': 'Notification', 'icon': 'images/ic_my_team.png'},
-    {'title': 'Account Settings', 'icon': 'images/ic_my_recommend.png'}
+    {'title': 'My Deal Requests', 'icon': 'images/app_iconfont/coupon1.png'},
+    {'title': 'Refer & Earn Money', 'icon': 'images/app_iconfont/dollar.png'},
+    {'title': 'My Favorite', 'icon': 'images/app_iconfont/heart.png'},
+    {'title': 'My Browsing History', 'icon': 'images/app_iconfont/history.png'},
+    {'title': 'Notification', 'icon': 'images/app_iconfont/notification.png'},
+    {'title': 'Account Settings', 'icon': 'images/app_iconfont/settings.png'}
   ];
   var icons = [];
   var userAvatar;
@@ -189,15 +188,49 @@ class MyInfoPageState extends State<MyInfoPage> {
                     flex: 2,
                     child: Column(
                       children: <Widget>[
-                        Image.asset(
-                          "images/jl_logo.png",
-                          width: 120.0,
+                        Container(
+                          padding: const EdgeInsets.all(0.0),
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),
+                          width: 80.0,
                           height: 80.0,
+                          child: userAvatar != null
+                              ? Image.asset(
+                                  "images/jl_logo.png",
+                                  width: 80.0,
+                                  height: 80.0,
+                                )
+                              : Card(
+                                  margin: const EdgeInsets.all(0.0),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(40)),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Image.network(
+                                    "https://www.xiaoxiangba.com/images/avatar.png",
+                                    width: double.maxFinite,
+                                  ),
+                                ),
+                          decoration: new BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(40.0)),
+                              border: new Border.all(
+                                  width: 0.0, color: Colors.blue)),
                         ),
-                        Text(
-                          'weisen170304@gmail.com',
-                          style: TextStyle(fontSize: 14.0),
-                        ),
+                        userName != null
+                            ? Text(
+                                'weisen170304@gmail.com',
+                                style: TextStyle(fontSize: 14.0),
+                              )
+                            : InkWell(
+                                child: Text(
+                                  'Log in / Sign up',
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                onTap: () => {_login()},
+                              ),
                       ],
                     ),
                   ),
@@ -315,8 +348,12 @@ class MyInfoPageState extends State<MyInfoPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
-              child: Image.asset(item['icon'],
-                  width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
+              child: Image.asset(
+                item['icon'],
+                width: IMAGE_ICON_WIDTH,
+                height: IMAGE_ICON_WIDTH,
+                color: Color(0xFFAAAAAA),
+              ),
             ),
             Expanded(
                 child: Text(
@@ -359,7 +396,9 @@ class MyInfoPageState extends State<MyInfoPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 0.0, 10.0, 0.0),
               child: Image.asset(item['icon'],
-                  width: IMAGE_ICON_WIDTH, height: IMAGE_ICON_WIDTH),
+                  width: IMAGE_ICON_WIDTH,
+                  height: IMAGE_ICON_WIDTH,
+                  color: Color(0xFFAAAAAA)),
             ),
             Expanded(
                 child: Text(

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_osc/util/ThemeUtils.dart';
 
 class CommonButton extends StatefulWidget {
+  final double height;
   final String text;
   final GestureTapCallback onTap;
 
-  CommonButton({@required this.text, @required this.onTap});
+  CommonButton({@required this.text, @required this.height, @required this.onTap});
 
   @override
   State<StatefulWidget> createState() => CommonButtonState();
@@ -22,11 +23,11 @@ class CommonButtonState extends State<CommonButton> {
         this.widget.onTap();
       },
       child: Container(
-        height: 40,
+        height: this.widget.height,
         decoration: BoxDecoration(
             color: color,
             border: Border.all(color: const Color(0xffcccccc)),
-            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            borderRadius: BorderRadius.all(Radius.circular(this.widget.height / 2))),
         child: Center(
           child: Text(
             this.widget.text,

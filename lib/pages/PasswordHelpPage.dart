@@ -1,30 +1,29 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_osc/constants/Constants.dart';
+import 'package:flutter_osc/pages/LoginPage.dart';
 import 'package:flutter_osc/util/DataUtils.dart';
 import 'package:flutter_osc/util/ThemeUtils.dart';
 import 'package:flutter_osc/widgets/CommonButton.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../pages/PasswordRestPage.dart';
-import '../pages/JoinNowPage.dart';
+import "package:http/http.dart" as http;
 
-// GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
-//   // 'eamil',
-//   // 'https://www.googleapis.com/auth/contacts.readonly'
-//   'https://www.googleapis.com/auth/drive'
-// ]);
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+  // 'eamil',
+  // 'https://www.googleapis.com/auth/contacts.readonly'
+  'https://www.googleapis.com/auth/drive'
+]);
 
 // 新的登录界面，隐藏WebView登录页面
-class NewLoginPage extends StatefulWidget {
+class PasswordHelpPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => NewLoginPageState();
+  State<StatefulWidget> createState() => PasswordHelpPageState();
 }
 
-class NewLoginPageState extends State<NewLoginPage> {
+class PasswordHelpPageState extends State<PasswordHelpPage> {
   // 首次加载登录页
   static const int stateFirstLoad = 1;
   // 加载完毕登录页，且当前页面是输入账号密码的页面
@@ -63,69 +62,69 @@ class NewLoginPageState extends State<NewLoginPage> {
   // 插件提供的对象，该对象用于WebView的各种操作
   FlutterWebviewPlugin flutterWebViewPlugin = FlutterWebviewPlugin();
 
-  // GoogleSignInAccount _currentUser;
+  GoogleSignInAccount _currentUser;
 
-  // String _contactText;
+  String _contactText;
 
   @override
   void initState() {
-    // super.initState();
+    super.initState();
     // 监听WebView的加载事件
-    // _onStateChanged =
-    //     flutterWebViewPlugin.onStateChanged.listen((WebViewStateChanged state) {
-    //   // state.type是一个枚举类型，取值有：WebViewState.shouldStart, WebViewState.startLoad, WebViewState.finishLoad
-    //   switch (state.type) {
-    //     case WebViewState.shouldStart:
-    //       // 准备加载
-    //       setState(() {
-    //         loading = true;
-    //       });
-    //       break;
-    //     case WebViewState.startLoad:
-    //       // 开始加载
-    //       break;
-    //     case WebViewState.finishLoad:
-    //       // 加载完成
-    //       setState(() {
-    //         loading = false;
-    //       });
-    //       if (isLoadingCallbackPage) {
-    //         // 当前是回调页面，则调用js方法获取数据，延迟加载防止get()获取不到数据
-    //         Timer(const Duration(seconds: 1), () {
-    //           parseResult();
-    //         });
-    //         return;
-    //       }
-    //       switch (curState) {
-    //         case stateFirstLoad:
-    //         case stateLoadedInputPage:
-    //           // 首次加载完登录页，判断是否是输入账号密码的界面
-    //           isInputPage().then((result) {
-    //             if ("true".compareTo(result) == 0) {
-    //               // 是输入账号的页面，则直接填入账号密码并模拟点击登录按钮
-    //               // autoLogin();
-    //             } else {
-    //               // 不是输入账号的页面，则需要模拟点击"换个账号"按钮
-    //               redirectToInputPage();
-    //             }
-    //           });
-    //           break;
-    //         case stateLoadedNotInputPage:
-    //           // 不是输入账号密码的界面，则需要模拟点击"换个账号"按钮
-    //           break;
-    //       }
-    //       break;
-    //     case WebViewState.abortLoad:
-    //       break;
-    //   }
-    // });
-    // _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((url) {
-    //   // 登录成功会跳转到自定义的回调页面，该页面地址为http://yubo725.top/osc/osc.php?code=xxx
-    //   // 该页面会接收code，然后根据code换取AccessToken，并将获取到的token及其他信息，通过js的get()方法返回
-    //   if (url != null && url.length > 0 && url.contains("/logincallback")) {
-    //     isLoadingCallbackPage = true;
-    //   }
-    // });
+    _onStateChanged =
+        flutterWebViewPlugin.onStateChanged.listen((WebViewStateChanged state) {
+      // state.type是一个枚举类型，取值有：WebViewState.shouldStart, WebViewState.startLoad, WebViewState.finishLoad
+      switch (state.type) {
+        case WebViewState.shouldStart:
+          // 准备加载
+          setState(() {
+            loading = true;
+          });
+          break;
+        case WebViewState.startLoad:
+          // 开始加载
+          break;
+        case WebViewState.finishLoad:
+          // 加载完成
+          setState(() {
+            loading = false;
+          });
+          if (isLoadingCallbackPage) {
+            // 当前是回调页面，则调用js方法获取数据，延迟加载防止get()获取不到数据
+            Timer(const Duration(seconds: 1), () {
+              parseResult();
+            });
+            return;
+          }
+          switch (curState) {
+            case stateFirstLoad:
+            case stateLoadedInputPage:
+              // 首次加载完登录页，判断是否是输入账号密码的界面
+              isInputPage().then((result) {
+                if ("true".compareTo(result) == 0) {
+                  // 是输入账号的页面，则直接填入账号密码并模拟点击登录按钮
+                  // autoLogin();
+                } else {
+                  // 不是输入账号的页面，则需要模拟点击"换个账号"按钮
+                  redirectToInputPage();
+                }
+              });
+              break;
+            case stateLoadedNotInputPage:
+              // 不是输入账号密码的界面，则需要模拟点击"换个账号"按钮
+              break;
+          }
+          break;
+        case WebViewState.abortLoad:
+          break;
+      }
+    });
+    _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((url) {
+      // 登录成功会跳转到自定义的回调页面，该页面地址为http://yubo725.top/osc/osc.php?code=xxx
+      // 该页面会接收code，然后根据code换取AccessToken，并将获取到的token及其他信息，通过js的get()方法返回
+      if (url != null && url.length > 0 && url.contains("/logincallback")) {
+        isLoadingCallbackPage = true;
+      }
+    });
     // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
     //   setState(() {
     //     _currentUser = account;
@@ -183,17 +182,17 @@ class NewLoginPageState extends State<NewLoginPage> {
   //   return null;
   // }
 
-  // Future<void> _handleSignIn() async {
-  //   try {
-  //     await _googleSignIn.signIn();
-  //   } catch (error) {
-  //     print(error);
-  //   }
-  // }
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
 
-  // Future<void> _handleSignOut() async {
-  //   _googleSignIn.disconnect();
-  // }
+  Future<void> _handleSignOut() async {
+    _googleSignIn.disconnect();
+  }
 
   // 检查当前WebView是否是输入账号密码的页面
   Future<String> isInputPage() async {
@@ -219,7 +218,7 @@ class NewLoginPageState extends State<NewLoginPage> {
         "document.getElementById('f_email').value='$account'";
     // 填密码
     String jsInputPwd = "document.getElementById('f_pwd').value='$pwd'";
-    // 点击"连接"按钮
+    // 点击"连接"���钮
     String jsClickLoginBtn =
         "document.getElementsByClassName('rndbutton')[0].click()";
     // 执行上面3条js语句
@@ -246,7 +245,7 @@ class NewLoginPageState extends State<NewLoginPage> {
           if (map != null) {
             // 登录成功，取到了token，关闭当前页面
             DataUtils.saveLoginInfo(map);
-            // Navigator.pop(context, "refresh");
+            Navigator.pop(context, "refresh");
           }
         } catch (e) {
           print("parse login result error: $e");
@@ -262,7 +261,7 @@ class NewLoginPageState extends State<NewLoginPage> {
     var loginBtn = Builder(builder: (ctx) {
       return CommonButton(
           height: 48,
-          text: "Sign In",
+          text: "Continue",
           onTap: () {
             if (isOnLogin) return;
             // 拿到用户输入的账号密码
@@ -277,7 +276,7 @@ class NewLoginPageState extends State<NewLoginPage> {
             // 关闭键盘
             FocusScope.of(context).requestFocus(FocusNode());
             // 发送给webview，让webview登录后再取回token
-            // autoLogin(username, password);
+            autoLogin(username, password);
           });
     });
     var loadingView;
@@ -295,44 +294,32 @@ class NewLoginPageState extends State<NewLoginPage> {
     }
     return Scaffold(
         appBar: AppBar(
-          // title: Text("Log In", style: TextStyle(color: Colors.white)),
+          title: Text("Password help", style: TextStyle(color: Colors.white)),
           iconTheme: IconThemeData(color: Colors.white),
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
         ),
         backgroundColor: Color(0xf2f4f6ff),
         body: Container(
-          padding: const EdgeInsets.fromLTRB(40.0, 120.0, 40.0, 50.0),
+          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 50.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Container(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: 0.0,
-              //   child: WebviewScaffold(
-              //     key: _scaffoldKey,
-              //     hidden: true,
-              //     url: Constants.loginUrl, // 登录的URL
-              //     withZoom: true, // 允许网页缩放
-              //     withLocalStorage: true, // 允许LocalStorage
-              //     withJavascript: true, // 允许执行js代码
-              //   ),
-              // ),
-              Center(
-                child: Image.asset('images/jl_logo.png',
-                    width: 150.0, height: 60.0),
-              ),
-              Center(
-                  child: Text(
-                "Welcome Back",
-                style: TextStyle(fontSize: 20.0),
-              )),
-              Container(height: 10.0),
-              Center(
-                child: Text(
-                  "Sign in your account to save your favorite deals, create custom deal alerts and more.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12.0, color: Color(0xffaaaaaa)),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 0.0,
+                child: WebviewScaffold(
+                  key: _scaffoldKey,
+                  hidden: true,
+                  url: Constants.loginUrl, // 登录的URL
+                  withZoom: true, // 允许网页缩放
+                  withLocalStorage: true, // 允许LocalStorage
+                  withJavascript: true, // 允许执行js代码
                 ),
+              ),
+              Container(height: 10.0),
+              Text(
+                "We'll ask for the password whenever you sign in.",
+                style: TextStyle(fontSize: 12.0, color: Color(0xffaaaaaa)),
               ),
               Container(height: 20.0),
               Row(
@@ -342,7 +329,7 @@ class NewLoginPageState extends State<NewLoginPage> {
                       child: TextField(
                     controller: usernameCtrl,
                     decoration: InputDecoration(
-                        hintText: "Email",
+                        hintText: "Email code",
                         hintStyle: TextStyle(color: const Color(0xFF808080)),
                         filled: true,
                         fillColor: Colors.white,
@@ -376,124 +363,12 @@ class NewLoginPageState extends State<NewLoginPage> {
                               borderRadius: const BorderRadius.all(
                                   const Radius.circular(6.0))),
                           contentPadding: const EdgeInsets.all(13.0),
-                          suffix: InkWell(
-                              child: Text(
-                                'Forget?',
-                                style: TextStyle(
-                                    color: ThemeUtils.currentColorTheme),
-                              ),
-                              onTap: () {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return PasswordRestPage();
-                                }));
-                              }),
                         )),
                   )
                 ],
               ),
               Container(height: 20.0),
               loginBtn,
-              Container(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                      flex: 1,
-                      child: Container(
-                          margin: const EdgeInsets.fromLTRB(0, 0, 30, 0),
-                          padding: EdgeInsets.all(2.0),
-                          // width: 200.0,
-                          height: 45.0,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                  color: const Color(0xffcccccc), width: 0),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(4.0))),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                  flex: 1,
-                                  child: Image.asset(
-                                    'images/facebook.png',
-                                    width: 20,
-                                    height: 20,
-                                    color: Color(0xff3c5a99),
-                                  )),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  'with Facebook',
-                                  style:
-                                      TextStyle(color: const Color(0xFF808080)),
-                                ),
-                              ),
-                            ],
-                          ))),
-                  Expanded(
-                      flex: 1,
-                      child: InkWell(
-                        child: Container(
-                            margin: const EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            padding: EdgeInsets.all(2.0),
-                            width: 100.0,
-                            height: 45.0,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: const Color(0xffcccccc), width: 0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(4.0))),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 1,
-                                    child: Image.asset(
-                                      'images/google.png',
-                                      width: 20,
-                                      height: 20,
-                                      color: Color(0xffd81e06),
-                                    )),
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    'with google',
-                                    style: TextStyle(
-                                        color: const Color(0xFF808080)),
-                                  ),
-                                ),
-                              ],
-                            )),
-                        // onTap: _handleSignIn,
-                      )),
-                ],
-              ),
-              Container(height: 20.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text.rich(TextSpan(
-                      text: "Don't have an account?",
-                      style:
-                          TextStyle(fontSize: 12.0, color: Color(0xffaaaaaa)),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: "  Join Now",
-                            style: TextStyle(
-                                fontSize: 12.0, color: Color(0xff409eff)),
-                            recognizer: new TapGestureRecognizer()
-                              ..onTap = () {
-                                //添加一个点击事件
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                  return JoinNowPage();
-                                }));
-                              })
-                      ])),
-                ],
-              ),
               Expanded(
                   child: Column(
                 children: <Widget>[
@@ -524,14 +399,14 @@ class NewLoginPageState extends State<NewLoginPage> {
         ));
   }
 
-  // @override
-  // void dispose() {
-  //   // 回收相关资源
-  //   // Every listener should be canceled, the same should be done with this stream.
-  //   _onUrlChanged.cancel();
-  //   _onStateChanged.cancel();
-  //   flutterWebViewPlugin.dispose();
+  @override
+  void dispose() {
+    // 回收相关资源
+    // Every listener should be canceled, the same should be done with this stream.
+    _onUrlChanged.cancel();
+    _onStateChanged.cancel();
+    flutterWebViewPlugin.dispose();
 
-  //   super.dispose();
-  // }
+    super.dispose();
+  }
 }

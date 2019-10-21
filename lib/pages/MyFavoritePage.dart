@@ -215,6 +215,7 @@ class MyFavoritePageState extends State<MyFavoritePage> {
               Container(
                 width: 120,
                 child: CommonButton(
+                    height: 40,
                     text: "Group Coupon",
                     onTap: () => {getCouponCode(itemData['product_id'])}),
               ),
