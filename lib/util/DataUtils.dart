@@ -1,3 +1,8 @@
+/**
+ * Author: Weisen
+ * Date: 2019-10-14 20:43:59
+ * Github: https://github.com/weisen0304
+ */
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import '../model/UserInfo.dart';

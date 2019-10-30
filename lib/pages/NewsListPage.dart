@@ -13,6 +13,8 @@ import '../pages/DealRequestPage.dart';
 import '../widgets/CommonEndLine.dart';
 import '../widgets/SlideViewIndicator.dart';
 import '../widgets/CommonButton.dart';
+import 'package:flutter/cupertino.dart';
+import '../pages/CommonWebPage.dart';
 
 final slideViewIndicatorStateKey = GlobalKey<SlideViewIndicatorState>();
 
@@ -120,8 +122,12 @@ class NewsListPageState extends State<NewsListPage> {
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
                     padding: const EdgeInsets.fromLTRB(0, 0, 8.0, 0),
-                    child: Image.asset('images/app_iconfont/coupon2.png',
-                        width: 24.0, height: 24.0, color: Colors.white,),
+                    child: Image.asset(
+                      'images/app_iconfont/coupon2.png',
+                      width: 24.0,
+                      height: 24.0,
+                      color: Colors.white,
+                    ),
                   ),
                   onTap: () {
                     Navigator.of(context).push(
@@ -152,26 +158,29 @@ class NewsListPageState extends State<NewsListPage> {
       Map<String, dynamic> map = json.decode(data);
       showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-                title: Text('The Code Has Been Copied !'),
-                content: Text(
-                    'Simply paste "${map['voucher']}"into the promo code box at checkout.'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('close'),
-                    onPressed: () => Navigator.pop(context, false),
+          builder: (context) => CupertinoAlertDialog(
+                  title: Text('The Code Has Been Copied!'), //对话框标题
+                  content: SingleChildScrollView(
+                    //对话框内容部分
+                    child: ListBody(
+                      children: [
+                        Text('simply paste "${map['voucher']}" into the promo code box at checkout.')
+                      ],
+                    ),
                   ),
-                  FlatButton(
-                      child: Text('Buy Now'),
-                      onPressed: () => {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) =>
-                                    AmzDetailPage(amzLink: map['amz_link'])))
-                          }
-                      // Navigator.pop(context, true),
-                      ),
-                ],
-              ));
+                  actions: [
+                    CupertinoDialogAction(
+                      child: Text('Got it'),
+                      onPressed: () {
+                             Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => CommonWebPage(title: 'Vipgo.store', url: map['amz_link'],)));
+                      },
+                    ),
+                    // CupertinoDialogAction(
+                    //   child: Text('取消'),
+                    //   onPressed: () {},
+                    // ),
+                  ]));
     });
   }
 

@@ -1,3 +1,7 @@
+/**
+ * Author: Weisen
+ * Date: 2019-10-14 20:45:32
+ */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'constants/Constants.dart';
@@ -13,7 +17,6 @@ import './widgets/MyDrawer.dart';
 void main() {
   runApp(MyOSCClient());
 }
-
 class MyOSCClient extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MyOSCClientState();

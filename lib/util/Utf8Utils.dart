@@ -1,3 +1,9 @@
+/**
+ * Author: Weisen
+ * Date: 2019-10-14 20:43:59
+ * Github: https://github.com/weisen0304
+ */
+
 import 'dart:convert';
 
 class Utf8Utils {

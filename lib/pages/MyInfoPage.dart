@@ -1,3 +1,8 @@
+/**
+ * Author: Weisen
+ * Date: 2019-10-14 20:43:15
+ * Github: https://github.com/weisen0304
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_osc/constants/Constants.dart';
 import 'package:flutter_osc/events/ChangeThemeEvent.dart';
@@ -193,9 +198,9 @@ class MyInfoPageState extends State<MyInfoPage> {
                           margin: const EdgeInsets.fromLTRB(0, 0, 0, 10.0),
                           width: 80.0,
                           height: 80.0,
-                          child: userAvatar != null
+                          child: userAvatar == null
                               ? Image.asset(
-                                  "images/jl_logo.png",
+                                  "images/vipgo_logo_168x580@1x.png",
                                   width: 80.0,
                                   height: 80.0,
                                 )
@@ -214,7 +219,7 @@ class MyInfoPageState extends State<MyInfoPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(40.0)),
                               border: new Border.all(
-                                  width: 0.0, color: Colors.blue)),
+                                  width: 0.0, color: Colors.white)),
                         ),
                         userName != null
                             ? Text(

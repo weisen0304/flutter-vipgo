@@ -1,3 +1,8 @@
+/**
+ * Author: Weisen
+ * Date: 2019-10-14 20:43:15
+ * Github: https://github.com/weisen0304
+ */
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -69,7 +74,7 @@ class NewLoginPageState extends State<NewLoginPage> {
 
   @override
   void initState() {
-    // super.initState();
+    super.initState();
     // 监听WebView的加载事件
     // _onStateChanged =
     //     flutterWebViewPlugin.onStateChanged.listen((WebViewStateChanged state) {
@@ -318,7 +323,7 @@ class NewLoginPageState extends State<NewLoginPage> {
               //   ),
               // ),
               Center(
-                child: Image.asset('images/jl_logo.png',
+                child: Image.asset('images/vipgo_logo_168x580@1x.png',
                     width: 150.0, height: 60.0),
               ),
               Center(
