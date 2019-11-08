@@ -8,12 +8,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/constants/Constants.dart';
-import 'package:flutter_osc/util/DataUtils.dart';
-import 'package:flutter_osc/util/ThemeUtils.dart';
-import 'package:flutter_osc/widgets/CommonButton.dart';
+import 'package:flutter_vipgo/util/DataUtils.dart';
+import 'package:flutter_vipgo/util/ThemeUtils.dart';
+import 'package:flutter_vipgo/widgets/CommonButton.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../pages/PasswordRestPage.dart';
 import '../pages/JoinNowPage.dart';
 

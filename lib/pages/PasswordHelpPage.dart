@@ -2,14 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/constants/Constants.dart';
-import 'package:flutter_osc/pages/LoginPage.dart';
-import 'package:flutter_osc/util/DataUtils.dart';
-import 'package:flutter_osc/util/ThemeUtils.dart';
-import 'package:flutter_osc/widgets/CommonButton.dart';
+import 'package:flutter_vipgo/constants/Constants.dart';
+import 'package:flutter_vipgo/util/DataUtils.dart';
+import 'package:flutter_vipgo/widgets/CommonButton.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import "package:http/http.dart" as http;
 
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
   // 'eamil',

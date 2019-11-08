@@ -1,13 +1,17 @@
+/**
+ * Author: Weisen
+ * Date: 2019-10-14 20:43:15
+ * Github: https://github.com/weisen0304
+ */
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/constants/Constants.dart';
-import 'package:flutter_osc/events/LoginEvent.dart';
-import 'package:flutter_osc/pages/NewLoginPage.dart';
-import 'package:flutter_osc/util/BlackListUtils.dart';
+import 'package:flutter_vipgo/constants/Constants.dart';
+import 'package:flutter_vipgo/events/LoginEvent.dart';
+import 'package:flutter_vipgo/pages/NewLoginPage.dart';
+import 'package:flutter_vipgo/util/BlackListUtils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../util/NetUtils.dart';
 import '../api/Api.dart';
 import 'dart:convert';
-import '../pages/LoginPage.dart';
 import '../util/DataUtils.dart';
 import '../util/Utf8Utils.dart';
 

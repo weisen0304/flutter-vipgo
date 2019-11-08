@@ -7,7 +7,6 @@ import 'dart:convert';
 import '../constants/Constants.dart';
 import '../widgets/SlideView.dart';
 import '../pages/NewsDetailPage.dart';
-import '../pages/AmzDetailPage.dart';
 import '../pages/NewsListPageSearch.dart';
 import '../pages/DealRequestPage.dart';
 import '../widgets/CommonEndLine.dart';
@@ -28,6 +27,7 @@ class NewsListPageState extends State<NewsListPage> {
   final TextStyle titleTextStyle = TextStyle(fontSize: 15.0);
   final TextStyle subtitleStyle =
       TextStyle(color: const Color(0xFFB5BDC0), fontSize: 12.0);
+  final tabArr = ['Featured', 'Instant', 'Upcoming', 'Group'];
 
   var listData;
   var slideData;
@@ -142,6 +142,9 @@ class NewsListPageState extends State<NewsListPage> {
                   new Tab(text: "Upcoming"),
                   new Tab(text: "Group"),
                 ],
+                onTap: (i) => {
+                  getNewsList(true)
+                },
               ),
             ),
             body: new TabBarView(
@@ -154,6 +157,7 @@ class NewsListPageState extends State<NewsListPage> {
   getCouponCode(String productId) {
     String url = Api.couponCode;
     url += "?product_id=$productId";
+    print(url);
     NetUtils.get(url).then((data) {
       Map<String, dynamic> map = json.decode(data);
       showDialog(
@@ -164,7 +168,8 @@ class NewsListPageState extends State<NewsListPage> {
                     //对话框内容部分
                     child: ListBody(
                       children: [
-                        Text('simply paste "${map['voucher']}" into the promo code box at checkout.')
+                        Text(
+                            'simply paste "${map['voucher']}" into the promo code box at checkout.')
                       ],
                     ),
                   ),
@@ -172,8 +177,11 @@ class NewsListPageState extends State<NewsListPage> {
                     CupertinoDialogAction(
                       child: Text('Got it'),
                       onPressed: () {
-                             Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => CommonWebPage(title: 'Vipgo.store', url: map['amz_link'],)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => CommonWebPage(
+                                  title: 'Vipgo.store',
+                                  url: map['amz_link'],
+                                )));
                       },
                     ),
                     // CupertinoDialogAction(
@@ -189,11 +197,12 @@ class NewsListPageState extends State<NewsListPage> {
     String url = Api.newsList;
     url += "?pageIndex=$curPage&pageSize=10";
     NetUtils.get(url).then((data) {
+      print(data);
       if (data != null) {
         // 将接口返回的json字符串解析为map类型
         Map<String, dynamic> map = json.decode(data);
         if (map['code'] == 200) {
-          // code=0表示请求成功
+          // code=0表示请求成功rw
           // var msg = map['msg'];
           // total表示资讯总条数
           listTotalSize = 24;

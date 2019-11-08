@@ -8,11 +8,8 @@ import '../constants/Constants.dart';
 import '../widgets/SlideView.dart';
 import '../pages/NewsDetailPage.dart';
 import '../pages/AmzDetailPage.dart';
-import '../pages/NewsListPageSearch.dart';
-import '../pages/DealRequestPage.dart';
 import '../widgets/CommonEndLine.dart';
 import '../widgets/SlideViewIndicator.dart';
-import '../widgets/MyDrawer.dart';
 import '../widgets/CommonButton.dart';
 
 final slideViewIndicatorStateKey = GlobalKey<SlideViewIndicatorState>();

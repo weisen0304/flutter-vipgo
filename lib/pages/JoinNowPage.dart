@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/constants/Constants.dart';
-import 'package:flutter_osc/pages/NewLoginPage.dart';
-import 'package:flutter_osc/util/ThemeUtils.dart';
-import 'package:flutter_osc/widgets/CommonButton.dart';
+import 'package:flutter_vipgo/constants/Constants.dart';
+import 'package:flutter_vipgo/pages/NewLoginPage.dart';
+import 'package:flutter_vipgo/util/ThemeUtils.dart';
+import 'package:flutter_vipgo/widgets/CommonButton.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 // 新的登录界面，隐藏WebView登录页面

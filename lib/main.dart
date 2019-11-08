@@ -17,6 +17,7 @@ import './widgets/MyDrawer.dart';
 void main() {
   runApp(MyOSCClient());
 }
+
 class MyOSCClient extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MyOSCClientState();
@@ -24,18 +25,21 @@ class MyOSCClient extends StatefulWidget {
 
 class MyOSCClientState extends State<MyOSCClient> {
   final appBarTitles = ['Home', 'Category', 'Discovery', 'Profile'];
-  final tabTextStyleSelected = TextStyle(color: ThemeUtils.currentColorTheme, fontWeight: FontWeight.w300);
-  final tabTextStyleNormal = TextStyle(color: const Color(0xff333333), fontWeight: FontWeight.w300);
+  final tabTextStyleSelected = TextStyle(
+      color: ThemeUtils.currentColorTheme, fontWeight: FontWeight.w300);
+  final tabTextStyleNormal =
+      TextStyle(color: const Color(0xff333333), fontWeight: FontWeight.w300);
 
   Color themeColor = ThemeUtils.currentColorTheme;
+  Color defaultColor = Color(0xff333333);
   int _tabIndex = 0;
 
   var tabImages;
   var _body;
   var pages;
 
-  Image getTabImage(path) {
-    return Image.asset(path, width: 20.0, height: 20.0);
+  Image getTabImage(path, color) {
+    return Image.asset(path, width: 20.0, height: 20.0, color: color,);
   }
 
   @override
@@ -62,20 +66,20 @@ class MyOSCClientState extends State<MyOSCClient> {
     if (tabImages == null) {
       tabImages = [
         [
-          getTabImage('images/home.png'),
-          getTabImage('images/home_actived.png')
+          getTabImage('images/home.png', defaultColor),
+          getTabImage('images/home_actived.png', themeColor)
         ],
         [
-          getTabImage('images/category.png'),
-          getTabImage('images/category_actived.png')
+          getTabImage('images/category.png', defaultColor),
+          getTabImage('images/category_actived.png', themeColor)
         ],
         [
-          getTabImage('images/collect.png'),
-          getTabImage('images/collect_actived.png')
+          getTabImage('images/collect.png', defaultColor),
+          getTabImage('images/collect_actived.png', themeColor)
         ],
         [
-          getTabImage('images/profile.png'),
-          getTabImage('images/profile_actived.png')
+          getTabImage('images/profile.png', defaultColor),
+          getTabImage('images/profile_actived.png', themeColor)
         ]
       ];
     }
@@ -117,13 +121,21 @@ class MyOSCClientState extends State<MyOSCClient> {
           bottomNavigationBar: CupertinoTabBar(
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                  icon: getTabIcon(0), title: getTabTitle(0)),
+                  backgroundColor: themeColor,
+                  icon: getTabIcon(0),
+                  title: getTabTitle(0)),
               BottomNavigationBarItem(
-                  icon: getTabIcon(1), title: getTabTitle(1)),
+                  backgroundColor: themeColor,
+                  icon: getTabIcon(1),
+                  title: getTabTitle(1)),
               BottomNavigationBarItem(
-                  icon: getTabIcon(2), title: getTabTitle(2)),
+                  backgroundColor: themeColor,
+                  icon: getTabIcon(2),
+                  title: getTabTitle(2)),
               BottomNavigationBarItem(
-                  icon: getTabIcon(3), title: getTabTitle(3)),
+                  backgroundColor: themeColor,
+                  icon: getTabIcon(3),
+                  title: getTabTitle(3)),
             ],
             currentIndex: _tabIndex,
             onTap: (index) {

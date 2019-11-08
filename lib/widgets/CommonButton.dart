@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/util/ThemeUtils.dart';
+import 'package:flutter_vipgo/util/ThemeUtils.dart';
 
 class CommonButton extends StatefulWidget {
   final double height;

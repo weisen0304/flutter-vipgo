@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/constants/Constants.dart';
-import 'package:flutter_osc/util/ThemeUtils.dart';
-import 'package:flutter_osc/widgets/CommonButton.dart';
+import 'package:flutter_vipgo/constants/Constants.dart';
+import 'package:flutter_vipgo/util/ThemeUtils.dart';
+import 'package:flutter_vipgo/widgets/CommonButton.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import '../pages/PasswordHelpPage.dart';
 

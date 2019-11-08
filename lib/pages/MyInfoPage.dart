@@ -4,11 +4,11 @@
  * Github: https://github.com/weisen0304
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_osc/constants/Constants.dart';
-import 'package:flutter_osc/events/ChangeThemeEvent.dart';
-import 'package:flutter_osc/events/LoginEvent.dart';
-import 'package:flutter_osc/events/LogoutEvent.dart';
-import 'package:flutter_osc/util/ThemeUtils.dart';
+import 'package:flutter_vipgo/constants/Constants.dart';
+import 'package:flutter_vipgo/events/ChangeThemeEvent.dart';
+import 'package:flutter_vipgo/events/LoginEvent.dart';
+import 'package:flutter_vipgo/events/LogoutEvent.dart';
+import 'package:flutter_vipgo/util/ThemeUtils.dart';
 import '../pages/CommonWebPage.dart';
 import '../pages/LoginPage.dart';
 import '../pages/NewLoginPage.dart';
@@ -231,7 +231,7 @@ class MyInfoPageState extends State<MyInfoPage> {
                                   'Log in / Sign up',
                                   style: TextStyle(
                                       fontSize: 14.0,
-                                      color: Colors.blue,
+                                      color: themeColor,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 onTap: () => {_login()},
