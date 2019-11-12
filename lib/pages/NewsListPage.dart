@@ -15,19 +15,32 @@ import '../widgets/CommonButton.dart';
 import 'package:flutter/cupertino.dart';
 import '../pages/CommonWebPage.dart';
 
-final slideViewIndicatorStateKey = GlobalKey<SlideViewIndicatorState>();
-
 class NewsListPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => NewsListPageState();
 }
 
-class NewsListPageState extends State<NewsListPage> {
+class NewsListPageState extends State<NewsListPage>
+    with SingleTickerProviderStateMixin {
   final ScrollController _controller = ScrollController();
   final TextStyle titleTextStyle = TextStyle(fontSize: 15.0);
   final TextStyle subtitleStyle =
       TextStyle(color: const Color(0xFFB5BDC0), fontSize: 12.0);
-  final tabArr = ['Featured', 'Instant', 'Upcoming', 'Group'];
+  final List<Tab> _topTabs = <Tab>[
+    Tab(
+      text: 'Featured',
+    ),
+    Tab(
+      text: 'Instant',
+    ),
+    Tab(
+      text: 'Upcoming',
+    ),
+    Tab(
+      text: 'Group',
+    )
+  ];
+  TabController _tabController;
 
   var listData;
   var slideData;
@@ -40,12 +53,17 @@ class NewsListPageState extends State<NewsListPage> {
   @override
   void initState() {
     super.initState();
+    _tabController = new TabController(vsync: this, length: _topTabs.length);
+    _tabController.addListener(() {
+      listData.clear();
+      getNewsList(true);
+    });
     _controller.addListener(() {
       var maxScroll = _controller.position.maxScrollExtent;
       var pixels = _controller.position.pixels;
-      if (maxScroll == pixels && listData.length < listTotalSize) {
-        // scroll to bottom, get next page data
-//        print("load more ... ");
+      if (maxScroll == pixels &&
+          pixels > 0 &&
+          listData.length < listTotalSize) {
         curPage++;
         getNewsList(true);
       }
@@ -55,7 +73,8 @@ class NewsListPageState extends State<NewsListPage> {
 
   Future<Null> _pullToRefresh() async {
     curPage = 1;
-    getNewsList(false);
+    listData.clear();
+    getNewsList(true);
     return null;
   }
 
@@ -74,10 +93,10 @@ class NewsListPageState extends State<NewsListPage> {
         itemBuilder: (context, i) => renderRow(i),
         controller: _controller,
       );
-      // return RefreshIndicator(child: listView, onRefresh: _pullToRefresh);
 
       return new DefaultTabController(
-          length: 4,
+          initialIndex: 0,
+          length: _topTabs.length,
           child: new Scaffold(
             appBar: new AppBar(
               leading: InkWell(
@@ -136,19 +155,19 @@ class NewsListPageState extends State<NewsListPage> {
                 )
               ],
               bottom: new TabBar(
-                tabs: [
-                  new Tab(text: "Featured"),
-                  new Tab(text: "Instant"),
-                  new Tab(text: "Upcoming"),
-                  new Tab(text: "Group"),
-                ],
-                onTap: (i) => {
-                  getNewsList(true)
-                },
+                tabs: _topTabs,
+                controller: _tabController,
+                labelColor: Colors.white,
+                indicatorColor: themeColor,
+                onTap: (i) => {getNewsList(false)},
               ),
             ),
             body: new TabBarView(
-                children: [listView, listView, listView, listView]),
+                controller: _tabController,
+                children: _topTabs.map((Tab tab) {
+                  return RefreshIndicator(
+                      child: listView, onRefresh: _pullToRefresh);
+                }).toList()),
           ));
     }
   }
@@ -157,7 +176,6 @@ class NewsListPageState extends State<NewsListPage> {
   getCouponCode(String productId) {
     String url = Api.couponCode;
     url += "?product_id=$productId";
-    print(url);
     NetUtils.get(url).then((data) {
       Map<String, dynamic> map = json.decode(data);
       showDialog(
@@ -196,26 +214,21 @@ class NewsListPageState extends State<NewsListPage> {
   getNewsList(bool isLoadMore) {
     String url = Api.newsList;
     url += "?pageIndex=$curPage&pageSize=10";
+    print(url);
     NetUtils.get(url).then((data) {
       print(data);
       if (data != null) {
-        // 将接口返回的json字符串解析为map类型
         Map<String, dynamic> map = json.decode(data);
         if (map['code'] == 200) {
-          // code=0表示请求成功rw
-          // var msg = map['msg'];
-          // total表示资讯总条数
           listTotalSize = 24;
           // data为数据内容，其中包含slide和news两部分，分别表示头部轮播图数据，和下面的列表数据
           var _listData = map['data'];
-          var _slideData = [];
           setState(() {
             if (!isLoadMore) {
               // 不是加载更多，则直接为变量赋值
               listData = _listData;
-              slideData = _slideData;
             } else {
-              // 是加载更多，则需要将取到的news数据追加到原来的数据后面
+              // 是加载更多，则需要将取到的news数据追加到原来的数据后�����
               List list1 = List();
               // 添加原来的数据
               list1.addAll(listData);
@@ -225,38 +238,16 @@ class NewsListPageState extends State<NewsListPage> {
               if (list1.length >= listTotalSize) {
                 list1.add(Constants.endLineTag);
               }
-              // 给列表数据赋��
+              // 给列表数据赋值
               listData = list1;
-              // 轮播图数据
-              slideData = _slideData;
             }
-            initSlider();
           });
         }
       }
     });
   }
 
-  void initSlider() {
-    indicator =
-        SlideViewIndicator(slideData.length, key: slideViewIndicatorStateKey);
-    slideView = SlideView(slideData, indicator, slideViewIndicatorStateKey);
-  }
-
   Widget renderRow(i) {
-    // if (i == 0) {
-    //   return Container(
-    //       height: 180.0,
-    //       child: Stack(
-    //         children: <Widget>[
-    //           slideView,
-    //           Container(
-    //             alignment: Alignment.bottomCenter,
-    //             child: indicator,
-    //           )
-    //         ],
-    //       ));
-    // }
     i -= 1;
     if (i.isOdd) {
       return Divider(height: 1.0);
@@ -297,7 +288,9 @@ class NewsListPageState extends State<NewsListPage> {
                 child: CommonButton(
                     height: 40,
                     text: "Group Coupon",
-                    onTap: () => {getCouponCode(itemData['product_id'])}),
+                    onTap: () => {
+                          // getCouponCode(itemData['product_id'])
+                        }),
               ),
             ],
           ),
